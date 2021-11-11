@@ -21,3 +21,4 @@
 [createAsyncThunk](https://redux-toolkit.js.org/api/createAsyncThunk) или
 [RTK Query](https://redux-toolkit.js.org/rtk-query/overview) для взаимодействия
 с бекендом и асинхронными запросами.
+

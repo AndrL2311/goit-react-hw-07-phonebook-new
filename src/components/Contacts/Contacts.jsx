@@ -6,7 +6,7 @@ import s from './Contacts.module.css';
 import Contact from '../Contact/Contact';
 import contactsOperations from '../../redux/contacts/contacts-operations';
 
-function Contacts({ contacts, onDeleteContact, getContacts }) {
+function Contacts({ contacts, onDeleteContact, getContacts, isLoadingContacts }) {
   useEffect(() => {
     getContacts();
     // eslint-disable-next-line
@@ -14,6 +14,7 @@ function Contacts({ contacts, onDeleteContact, getContacts }) {
 
   return (
     <ul className={s.list}>
+      {isLoadingContacts && <h1>Downloads...</h1>}
       {contacts.map(contact => (
         <Contact
           key={contact.id}
@@ -34,8 +35,9 @@ const getVisibleContacts = (allContact, filter) => {
   );
 };
 
-const mapStateToProps = ({ contacts: { items, filter } }) => ({
+const mapStateToProps = ({ contacts: { items, filter, loading } }) => ({
   contacts: getVisibleContacts(items, filter),
+  isLoadingContacts: loading,
 });
 
 const mapDispachToProps = dispatch => ({

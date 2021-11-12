@@ -26,7 +26,14 @@ function Form({ onSubmit }) {
   const handleSubmit = event => {
     event.preventDefault();
 
+// if (state.find(contact => contact.name === payload.name)) {
+//   return alert(`${payload.name} is alredy in contacts`);
+// } else {
+//   return [...state, payload];
+// }
     const data = { name, number };
+
+
     onSubmit(data);
     // Сбрасываем имя и номер
     reset();
@@ -73,6 +80,8 @@ function Form({ onSubmit }) {
     </form>
   );
 }
+
+
 
 const mapDispatchToProps = dispatch => {
   return {

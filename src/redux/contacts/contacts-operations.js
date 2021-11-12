@@ -1,38 +1,33 @@
 import axios from "axios";
-import {
-  fetchContactRequest,
-  fetchContactSuccess,
-  fetchContactError,
-  addContactRequest,
-  addContactSuccess,
-  addContactError,
-  deleteContactRequest,
-  deleteContactSuccess,
-  deleteContactError,
-} from "./contacts-actions";
+import { createAsyncThunk } from "@reduxjs/toolkit";
 
 // axios.defaults.baseURL = 'http://localhost:4040';
 axios.defaults.baseURL = "https://618d6851fe09aa001744073a.mockapi.io/";
 
 // const fetchContacts = () => (dispatch) => {
 //   dispatch(fetchContactRequest());
-
 //   axios
 //     .get("/contacts")
 //     .then(({ data }) => dispatch(fetchContactSuccess(data)))
 //     .catch((error) => dispatch(fetchContactError(error)));
 // };
 
-const fetchContacts = () => async (dispatch) => {
-  dispatch(fetchContactRequest());
+// fetchContacts через асинхронную функцию
+// const fetchContacts = () => async (dispatch) => {
+//   dispatch(fetchContactRequest());
 
-  try {
-    const { data } = await axios.get("/contacts");
-    dispatch(fetchContactSuccess(data));
-  } catch (error) {
-    dispatch(fetchContactError(error));
-  }
-};
+//   try {
+//     const { data } = await axios.get("/contacts");
+//     dispatch(fetchContactSuccess(data));
+//   } catch (error) {
+//     dispatch(fetchContactError(error));
+//   }
+// };
+
+const fetchContacts = createAsyncThunk("contacts/fetchContact", async () => {
+  const { data } = await axios.get("/contacts");
+  return data;
+});
 
 // const addContact = (contact) => (dispatch) => {
 //   const item = { name: contact.name, number: contact.number };
@@ -44,18 +39,25 @@ const fetchContacts = () => async (dispatch) => {
 //     .catch((error) => dispatch(addContactError(error)));
 // };
 
-const addContact = (contact) => async (dispatch) => {
+// addContact через асинхронную функцию
+// const addContact = (contact) => async (dispatch) => {
+//   const item = { name: contact.name, number: contact.number };
+
+//   dispatch(addContactRequest());
+
+//   try {
+//     const { data } = await axios.post("/contacts", item);
+//     dispatch(addContactSuccess(data));
+//   } catch (error) {
+//     dispatch(addContactError(error));
+//   }
+// };
+
+const addContact = createAsyncThunk("contacts/addContact", async (contact) => {
   const item = { name: contact.name, number: contact.number };
-
-  dispatch(addContactRequest());
-
-  try {
-    const { data } = await axios.post("/contacts", item);
-    dispatch(addContactSuccess(data));
-  } catch (error) {
-    dispatch(addContactError(error));
-  }
-};
+  const { data } = await axios.post("/contacts", item);
+  return data;
+});
 
 // const deleteContact = (contactId) => (dispatch) => {
 //   dispatch(deleteContactRequest());
@@ -65,19 +67,25 @@ const addContact = (contact) => async (dispatch) => {
 //     .catch((error) => dispatch(deleteContactError(error)));
 // };
 
-const deleteContact = (contactId) => async (dispatch) => {
-  dispatch(deleteContactRequest());
+// deleteContact через асинхронную функцию
+// const deleteContact = (contactId) => async (dispatch) => {
+//   dispatch(deleteContactRequest());
 
-  try {
+//   try {
+//     await axios.delete(`/contacts/${contactId}`);
+//     dispatch(deleteContactSuccess(contactId));
+//   } catch (error) {
+//     dispatch(deleteContactError(error));
+//   }
+// };
+
+const deleteContact = createAsyncThunk(
+  "contacts/deleteContact",
+  async (contactId) => {
     await axios.delete(`/contacts/${contactId}`);
-    dispatch(deleteContactSuccess(contactId));
-  } catch (error) {
-    dispatch(deleteContactError(error));
+    return contactId;
   }
-};
-
-// deleteContactSuccess,
-// deleteContactError,
+);
 
 const contactsOperations = { fetchContacts, addContact, deleteContact };
 

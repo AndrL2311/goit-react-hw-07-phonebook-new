@@ -7,6 +7,7 @@ import Contact from '../Contact/Contact';
 import contactsOperations from '../../redux/contacts/contacts-operations';
 
 function Contacts({ contacts, onDeleteContact, getContacts, isLoadingContacts }) {
+  
   useEffect(() => {
     getContacts();
     // eslint-disable-next-line

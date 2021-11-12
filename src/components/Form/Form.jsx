@@ -6,7 +6,10 @@ import contactsOperations from '../../redux/contacts/contacts-operations';
 
 import s from './Form.module.css';
 
-function Form({ onSubmit }) {
+
+
+function Form({ onSubmit, contacts }) {
+
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
 
@@ -25,18 +28,18 @@ function Form({ onSubmit }) {
 
   const handleSubmit = event => {
     event.preventDefault();
-
-// if (state.find(contact => contact.name === payload.name)) {
-//   return alert(`${payload.name} is alredy in contacts`);
-// } else {
-//   return [...state, payload];
-// }
     const data = { name, number };
 
-
-    onSubmit(data);
-    // Сбрасываем имя и номер
-    reset();
+    // Проверка есть ли такое имя в базе
+    if (contacts.find(contact => contact.name === name)) {
+      alert(`${name} is alredy in contacts`);
+      // Сбрасываем имя и номер
+      reset();
+    } else {
+      onSubmit(data);
+        // Сбрасываем имя и номер
+      reset();
+    } 
   };
 
   const reset = () => {
@@ -81,7 +84,9 @@ function Form({ onSubmit }) {
   );
 }
 
-
+const mapStateToProps = (state) => ({
+    contacts: state.contacts.items,
+  });
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -89,7 +94,7 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(null, mapDispatchToProps)(Form);
+export default connect(mapStateToProps, mapDispatchToProps)(Form);
 
 Form.propTypes = {
   onSubmit: PropTypes.func.isRequired,
